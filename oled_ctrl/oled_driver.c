@@ -27,6 +27,12 @@
 #include "lcd-ks0713.h"
 #include "oled_driver.h"
 
+#ifdef BOXMODEL_DM8000
+int DM8000 = 1;
+#else
+int DM8000 = 0;
+#endif
+
 int lcd_read_value(const char *filename)
 {
 	int value = 0;
@@ -39,11 +45,11 @@ int lcd_read_value(const char *filename)
 	}
 	else
 	{
-		if (BOXMODEL_DM8000 && filename == LCD_XRES)
+		if (DM8000 && filename == LCD_XRES)
 			value = 132;
-		else if (BOXMODEL_DM8000 && filename == LCD_YRES)
+		else if (DM8000 && filename == LCD_YRES)
 			value = 64;
-		else if (BOXMODEL_DM8000 && filename == LCD_BPP)
+		else if (DM8000 && filename == LCD_BPP)
 			value = 8;
 		else
 			value = -1;
@@ -95,7 +101,7 @@ int lcd_open(const char *dev, int mode, int x_res, int y_res)
 		return -1;
 	}
 
-	if (BOXMODEL_DM8000 && xres == 132 && yres == 64 && bpp == 8) {
+	if (DM8000 && xres == 132 && yres == 64 && bpp == 8) {
 		printf("DM8000 original LCD not supported.\n", xres, yres, bpp);
 		return 0;
 	}
