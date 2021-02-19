@@ -39,7 +39,14 @@ int lcd_read_value(const char *filename)
 	}
 	else
 	{
-		value = -1;
+		if (BOXMODEL_DM8000 && filename == LCD_XRES)
+			value = 132;
+		else if (BOXMODEL_DM8000 && filename == LCD_YRES)
+			value = 64;
+		else if (BOXMODEL_DM8000 && filename == LCD_BPP)
+			value = 8;
+		else
+			value = -1;
 	}
 	return value;
 }
@@ -87,6 +94,12 @@ int lcd_open(const char *dev, int mode, int x_res, int y_res)
 		printf("%s: cannot read lcd bpp\n", __FUNCTION__);
 		return -1;
 	}
+
+	if (BOXMODEL_DM8000 && xres == 132 && yres == 64 && bpp == 8) {
+		printf("DM8000 original LCD not supported.\n", xres, yres, bpp);
+		return 0;
+	}
+
 	stride = xres * (bpp / 8);
 	return 0;
 }
@@ -288,9 +301,7 @@ void lcd_draw_character(FT_Bitmap* bitmap, FT_Int x, FT_Int y, int color)
 				continue;
 			}
 			if (bitmap->buffer[z] != 0x00) {
-				location = (j * (bpp / 8)) +
-					(i * stride);
-
+				location = (j * (bpp / 8)) + (i * stride);
 				if (bpp == 32) {
 					lcd_buffer[location] = RED(color);
 					lcd_buffer[location + 1] = GREEN(color);
