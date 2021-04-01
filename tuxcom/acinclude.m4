@@ -129,14 +129,11 @@ TUXBOX_APPS_DIRECTORY_ONE(datadir, DATADIR, datadir, /share, /tuxbox,
 TUXBOX_APPS_DIRECTORY_ONE(fontdir, FONTDIR, datadir, /share, /fonts,
 	[--with-fontdir=PATH], [where to find fonts])
 
-TUXBOX_APPS_DIRECTORY_ONE(gamesdir, GAMESDIR, localstatedir, /var, /tuxbox/games,
-	[--with-gamesdir=PATH], [where to find games])
-
 TUXBOX_APPS_DIRECTORY_ONE(libdir, LIBDIR, libdir, /lib, /tuxbox,
 	[--with-libdir=PATH], [where to find internal libs])
 
-TUXBOX_APPS_DIRECTORY_ONE(plugindir, PLUGINDIR, libdir, /lib, /tuxbox/plugins,
-	[--with-plugindir=PATH], [where to find plugins])
+TUXBOX_APPS_DIRECTORY_ONE(plugindir, PLUGINDIR, localstatedir, /var, /tuxbox/plugins,
+	[--with-plugindir=PATH], [where to find plugins in /var])
 
 TUXBOX_APPS_DIRECTORY_ONE(themesdir, THEMESDIR, datadir, /share, /tuxbox/neutrino/themes,
 	[--with-themesdir=PATH], [where to find themes])
@@ -146,7 +143,6 @@ dnl automake <= 1.6 needs this specifications
 AC_SUBST(CONFIGDIR)
 AC_SUBST(DATADIR)
 AC_SUBST(FONTDIR)
-AC_SUBST(GAMESDIR)
 AC_SUBST(LIBDIR)
 AC_SUBST(PLUGINDIR)
 AC_SUBST(THEMESDIR)
@@ -154,9 +150,9 @@ dnl end workaround
 
 AC_DEFUN([TUXBOX_BOXTYPE], [
 AC_ARG_WITH(boxtype,
-	AS_HELP_STRING([--with-boxtype], [valid values: tripledragon, spark, azbox, generic, armbox, duckbox, spark7162, mipsbox]),
+	AS_HELP_STRING([--with-boxtype], [valid values: spark, generic, armbox, duckbox, spark7162, mipsbox]),
 	[case "${withval}" in
-		tripledragon|azbox|generic|armbox)
+		generic|armbox)
 			BOXTYPE="$withval"
 		;;
 		spark|spark7162)
@@ -259,8 +255,6 @@ AS_HELP_STRING([], [valid for mipsbox: vuduo, vuduo2, dm8000, gb800se, osnino, o
 AC_SUBST(BOXTYPE)
 AC_SUBST(BOXMODEL)
 
-AM_CONDITIONAL(BOXTYPE_AZBOX, test "$BOXTYPE" = "azbox")
-AM_CONDITIONAL(BOXTYPE_TRIPLE, test "$BOXTYPE" = "tripledragon")
 AM_CONDITIONAL(BOXTYPE_SPARK, test "$BOXTYPE" = "spark")
 AM_CONDITIONAL(BOXTYPE_GENERIC, test "$BOXTYPE" = "generic")
 AM_CONDITIONAL(BOXTYPE_DUCKBOX, test "$BOXTYPE" = "duckbox")
@@ -317,11 +311,7 @@ AM_CONDITIONAL(BOXMODEL_VUPLUS_ALL, test "$BOXMODEL" = "vusolo4k" -o "$BOXMODEL"
 AM_CONDITIONAL(BOXMODEL_VUPLUS_ARM, test "$BOXMODEL" = "vusolo4k" -o "$BOXMODEL" = "vuduo4k" -o "$BOXMODEL" = "vuduo4kse" -o "$BOXMODEL" = "vuultimo4k" -o "$BOXMODEL" = "vuzero4k" -o "$BOXMODEL" = "vuuno4kse" -o "$BOXMODEL" = "vuuno4k")
 AM_CONDITIONAL(BOXMODEL_VUPLUS_MIPS, test "$BOXMODEL" = "vuduo" -o "$BOXMODEL" = "vuduo2")
 
-if test "$BOXTYPE" = "azbox"; then
-	AC_DEFINE(HAVE_AZBOX_HARDWARE, 1, [building for an azbox])
-elif test "$BOXTYPE" = "tripledragon"; then
-	AC_DEFINE(HAVE_TRIPLEDRAGON, 1, [building for a tripledragon])
-elif test "$BOXTYPE" = "spark"; then
+if test "$BOXTYPE" = "spark"; then
 	AC_DEFINE(HAVE_SPARK_HARDWARE, 1, [building for a goldenmedia 990 or edision pingulux])
 	AC_DEFINE(HAVE_SH4_HARDWARE, 1, [building for a sh4 box])
 elif test "$BOXTYPE" = "duckbox"; then
