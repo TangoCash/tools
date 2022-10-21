@@ -29,14 +29,14 @@
 #if BOXMODEL_E4HDULTRA
 #define FB_WIDTH_STD 220
 #define FB_HEIGHT_STD 176
+#define FB_BPP 16
 #else
 #define FB_WIDTH_STD 1280
 #define FB_HEIGHT_STD 720
 #define FB_WIDTH_HIGH 1920
 #define FB_HEIGHT_HIGH 1080
-#endif
-
 #define FB_BPP 32
+#endif
 
 #ifndef FBIO_BLIT
 #define FBIO_SET_MANUAL_BLIT _IOW('F', 0x21, __u8)
