@@ -27,12 +27,6 @@
 #include "lcd-ks0713.h"
 #include "oled_driver.h"
 
-#ifdef BOXMODEL_DM8000
-int DM8000 = 1;
-#else
-int DM8000 = 0;
-#endif
-
 int lcd_read_value(const char *filename)
 {
 	int value = 0;
@@ -45,13 +39,15 @@ int lcd_read_value(const char *filename)
 	}
 	else
 	{
-		if (DM8000 && filename == LCD_XRES)
+#if BOXMODEL_DM8000
+		if (filename == LCD_XRES)
 			value = 132;
-		else if (DM8000 && filename == LCD_YRES)
+		else if (filename == LCD_YRES)
 			value = 64;
-		else if (DM8000 && filename == LCD_BPP)
+		else if (filename == LCD_BPP)
 			value = 8;
 		else
+#endif
 			value = -1;
 	}
 	return value;
@@ -101,10 +97,12 @@ int lcd_open(const char *dev, int mode, int x_res, int y_res)
 		return -1;
 	}
 
-	if (DM8000 && xres == 132 && yres == 64 && bpp == 8) {
+#if BOXMODEL_DM8000
+	if (xres == 132 && yres == 64 && bpp == 8) {
 		printf("DM8000 original LCD not supported.\n", xres, yres, bpp);
 		return 0;
 	}
+#endif
 
 	stride = xres * (bpp / 8);
 	return 0;
@@ -112,7 +110,7 @@ int lcd_open(const char *dev, int mode, int x_res, int y_res)
 
 int lcd_setmode(int mode)
 {
-#ifndef BOXMODEL_DM8000
+#if !BOXMODEL_DM8000 && !BOXMODEL_E4HDULTRA
 	int tmp;
 	if (mode == 0)
 	{
@@ -212,8 +210,8 @@ void lcd_draw()
 
 int lcd_clear()
 {
-#ifndef BOXMODEL_DM8000
-	if (ioctl(fd,LCD_IOCTL_CLEAR) < 0)
+#if !BOXMODEL_DM8000 && !BOXMODEL_E4HDULTRA
+	if (ioctl(fd, LCD_IOCTL_CLEAR) < 0)
 	{
 		printf("%s: cannot clear lcd device\n", __FUNCTION__);
 		return -1;
