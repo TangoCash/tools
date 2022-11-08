@@ -67,7 +67,7 @@ int main(int argc, char **argv)
 	g_screeninfo_var.xres_virtual = g_screeninfo_var.xres = FB_WIDTH_STD;
 	g_screeninfo_var.yres_virtual = g_screeninfo_var.yres = FB_HEIGHT_STD;
 
-#if !BOXMODEL_E4HDULTRA || BOXMODEL_PROTEK4K
+#if !BOXMODEL_E4HDULTRA && !BOXMODEL_PROTEK4K
 	for(int x=1; x<argc; x++) {
 		if ((!strcmp(argv[x], "1"))) {
 			g_screeninfo_var.xres_virtual = g_screeninfo_var.xres = FB_WIDTH_HIGH;
