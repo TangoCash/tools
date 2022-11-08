@@ -1,3 +1,0 @@
-#include "libmmeimage.h"
-
-
