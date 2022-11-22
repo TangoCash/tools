@@ -736,11 +736,11 @@ int main(int argc, char **argv)
 
 	if (pips == 0)
 	{
-		for (int p=1; p < 3; p++)
+		for (int p=1; p < 4; p++)
 		{
 			char pipbuf[25];
-			sprintf(pipbuf,"/proc/stb/vmpeg/%d/xres",p);
-			if (proc_get_hex(pipbuf))
+			sprintf(pipbuf,"/proc/stb/vmpeg/%d/xres", p);
+			if ((int)proc_get_hex(pipbuf) > 0)
 				pips = p;
 		}
 	}
