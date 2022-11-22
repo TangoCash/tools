@@ -734,6 +734,17 @@ int main(int argc, char **argv)
 	if (stb_type == VULCAN || stb_type == PALLAS)
 		mallocsize=720*576;
 
+	if (pips == 0)
+	{
+		for (int p=1; p < 3; p++)
+		{
+			char pipbuf[25];
+			sprintf(pipbuf,"/proc/stb/vmpeg/%d/xres",p);
+			if (proc_get_hex(pipbuf))
+				pips = p;
+		}
+	}
+
 	video = (unsigned char *)malloc(mallocsize*3);
 	if (pips > 0)
 		video1 = (unsigned char *)malloc(mallocsize*3);
