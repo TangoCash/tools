@@ -83,7 +83,11 @@
 #if BOXMODEL_E4HDULTRA || BOXMODEL_PROTEK4K
 #define LCD_DEVICE "/dev/fb1"
 #else
+#if BOXMODEL_GBUE4K
+#define LCD_DEVICE "/dev/lcd0"
+#else
 #define LCD_DEVICE "/dev/oled0"
+#endif
 #endif
 
 #define LCD_MY_BRIGHTNESS 5 // 0 = use last brightnes (0-10)
